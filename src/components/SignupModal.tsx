@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Check } from 'lucide-react';
+import { X, Check, CheckCircle2, Mail } from 'lucide-react';
 import { supabase, BusinessSignup } from '../lib/supabase';
 
 interface SignupModalProps {
@@ -20,6 +20,7 @@ const steps = [
 export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [formData, setFormData] = useState<BusinessSignup>({
     email: '',
     email_verified: false,
@@ -94,18 +95,35 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
     } else {
       await saveProgress(7);
       setFormData(prev => ({ ...prev, completed: true }));
-      alert('Signup completed successfully!');
-      onClose();
+      setIsCompleted(true);
     }
   };
 
   const handlePrevious = () => {
-    if (currentStep > 1) {
+    if (!isCompleted && currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const renderStepContent = () => {
+    if (isCompleted) {
+      return (
+        <div className="text-center py-10">
+          <div className="w-20 h-20 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+            <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">Signup submitted successfully</h3>
+          <p className="text-gray-600 mb-4">We will reach out within 72 hours.</p>
+          <div className="inline-flex items-center space-x-2 text-gray-700">
+            <Mail className="w-5 h-5" />
+            <span>
+              For queries, email <a href="mailto:support@dollarpe.xyz" className="text-[#24cb71] underline">support@dollarpe.xyz</a>
+            </span>
+          </div>
+        </div>
+      );
+    }
+
     switch (currentStep) {
       case 1:
         return (
@@ -421,9 +439,9 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
 
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              {steps[currentStep - 1].name}
+              {isCompleted ? 'All Set!' : steps[currentStep - 1].name}
             </h3>
-            {currentStep === 1 && (
+            {currentStep === 1 && !isCompleted && (
               <p className="text-gray-600">
                 Verification of email is mandatory for setting up your account.
               </p>
@@ -436,31 +454,44 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
         </div>
 
         <div className="p-6 border-t border-gray-200 flex justify-between items-center bg-gray-50">
-          <button
-            onClick={handlePrevious}
-            disabled={currentStep === 1}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              currentStep === 1
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-            }`}
-          >
-            Previous
-          </button>
-          <div className="text-sm text-gray-500">
-            Step {currentStep} of {steps.length}
-          </div>
-          <button
-            onClick={handleNext}
-            disabled={loading || (currentStep === 1 && !formData.email_verified)}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              loading || (currentStep === 1 && !formData.email_verified)
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            {loading ? 'Saving...' : currentStep === 7 ? 'Complete Signup' : 'Next'}
-          </button>
+          {!isCompleted ? (
+            <>
+              <button
+                onClick={handlePrevious}
+                disabled={currentStep === 1}
+                className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                  currentStep === 1
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                }`}
+              >
+                Previous
+              </button>
+              <div className="text-sm text-gray-500">
+                Step {currentStep} of {steps.length}
+              </div>
+              <button
+                onClick={handleNext}
+                disabled={loading || (currentStep === 1 && !formData.email_verified)}
+                className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                  loading || (currentStep === 1 && !formData.email_verified)
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                {loading ? 'Saving...' : currentStep === 7 ? 'Complete Signup' : 'Next'}
+              </button>
+            </>
+          ) : (
+            <div className="w-full flex items-center justify-end">
+              <button
+                onClick={onClose}
+                className="px-6 py-3 rounded-lg font-semibold bg-[#24cb71] text-white hover:bg-[#24cb71]"
+              >
+                Close
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
