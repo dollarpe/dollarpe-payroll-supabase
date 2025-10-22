@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', mobile: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -14,6 +15,35 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const nextErrors: { [k: string]: string } = {};
+
+  // Required checks
+  if (!form.name.trim()) nextErrors.name = 'Name is required.';
+  if (!form.email.trim()) nextErrors.email = 'Email is required.';
+  // message is optional per request
+
+    // Email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (form.email && !emailRegex.test(form.email)) nextErrors.email = 'Please enter a valid email address.';
+
+    // Mobile/phone format (India-only 10 digit mobile numbers). Accepts digits only, optionally with spaces or dashes which will be stripped.
+    if (!form.mobile || !form.mobile.trim()) {
+      nextErrors.mobile = 'Mobile number is required.';
+    } else {
+      const digits = form.mobile.replace(/[^0-9]/g, '');
+      // Indian mobile numbers start with 6-9 and are 10 digits long
+      if (!/^[6-9][0-9]{9}$/.test(digits)) {
+        nextErrors.mobile = 'Please enter a valid 10-digit Indian mobile number starting with 6-9.';
+      }
+    }
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      // don't submit
+      return;
+    }
+
     // Placeholder submit: in real app, send to backend or email service
     console.log('Contact form submitted', form);
     setSubmitted(true);
@@ -66,40 +96,50 @@ export default function Contact() {
                 </div>
               ) : null}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Name *"
-                  className="w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  required
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="Email *"
-                  className="w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  required
-                />
-                <input
-                  name="mobile"
-                  value={form.mobile}
-                  onChange={handleChange}
-                  placeholder="Mobile Number"
-                  className="w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                />
-                <textarea
-                  name="message"
-                  rows={6}
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="Message *"
-                  className="w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  required
-                />
+              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                <div>
+                  <input
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Name *"
+                    className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.name ? 'border-rose-500' : 'border-gray-200'}`}
+                  />
+                  {errors.name ? <p className="text-rose-600 text-sm mt-1">{errors.name}</p> : null}
+                </div>
+                <div>
+                  {/* use text type to avoid browser native 'email' type checking; we validate with regex above */}
+                  <input
+                    type="text"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Email *"
+                    className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.email ? 'border-rose-500' : 'border-gray-200'}`}
+                  />
+                  {errors.email ? <p className="text-rose-600 text-sm mt-1">{errors.email}</p> : null}
+                </div>
+                <div>
+                  <input
+                    name="mobile"
+                    value={form.mobile}
+                    onChange={handleChange}
+                    placeholder="Mobile Number *"
+                    className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.mobile ? 'border-rose-500' : 'border-gray-200'}`}
+                  />
+                  {errors.mobile ? <p className="text-rose-600 text-sm mt-1">{errors.mobile}</p> : null}
+                </div>
+                <div>
+                  <textarea
+                    name="message"
+                    rows={6}
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="Message (optional)"
+                    className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.message ? 'border-rose-500' : 'border-gray-200'}`}
+                  />
+                  {errors.message ? <p className="text-rose-600 text-sm mt-1">{errors.message}</p> : null}
+                </div>
                 <p className="text-sm text-gray-600">By clicking Submit, you agree to our <a href="/privacy" className="text-emerald-700 underline">Privacy Policy</a>.</p>
                 <button type="submit" className="w-full bg-[#24cb71] text-white py-3 rounded-lg hover:bg-[#24cb71] transition-colors font-semibold">
                   SUBMIT
