@@ -598,8 +598,8 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+  <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
@@ -615,7 +615,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           </button>
         </div>
 
-        <div className="p-6">
+  <div className="p-6 overflow-auto flex-1">
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               {steps.map((step, index) => (
@@ -668,7 +668,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           </div>
         </div>
 
-        <div className="p-6 border-t border-gray-200 flex justify-between items-center bg-gray-50">
+  <div className="p-6 border-t border-gray-200 flex justify-between items-center bg-gray-50 flex-shrink-0">
           {!isCompleted ? (
             <>
               <button
