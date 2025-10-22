@@ -42,11 +42,119 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
     completed: false,
   });
   const [signupId, setSignupId] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
 
   if (!isOpen) return null;
 
   const handleInputChange = (field: keyof BusinessSignup, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+
+    // Live-clear error for the field
+    setErrors(prev => {
+      const copy = { ...prev };
+      delete copy[field as string];
+      return copy;
+    });
+  };
+
+  const validateEmail = (email: string) => {
+    if (!email || !email.trim()) return 'Email is required.';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email address.';
+    return '';
+  };
+
+  const handleVerifyEmail = async () => {
+    const emailError = validateEmail(formData.email || '');
+    if (emailError) {
+      setErrors(prev => ({ ...prev, email: emailError }));
+      return;
+    }
+
+    // Optionally, you could trigger a real verification (send OTP/email); here we mark verified and save progress
+    try {
+      setLoading(true);
+      await saveProgress(currentStep);
+      setFormData(prev => ({ ...prev, email_verified: true }));
+    } catch (err) {
+      console.error('Verification save failed', err);
+      setErrors(prev => ({ ...prev, email: 'Failed to verify email. Please try again.' }));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const validateIndianMobile = (raw: string) => {
+    const input = raw || '';
+    const digitsOnly = input.replace(/[^0-9]/g, '');
+    let digits = digitsOnly;
+
+    // If user included country code like '91' or '+91' or a leading 0, strip common prefixes to get last 10 digits
+    if (digits.length > 10) {
+      // If user included a leading 0 or country code (e.g., 091, 91, +91), normalize by taking the last 10 digits
+      if (digits.length === 11 && digits.startsWith('0')) {
+        digits = digits.slice(1);
+      } else if (digits.length > 10) {
+        digits = digits.slice(digits.length - 10);
+      }
+    }
+
+    if (!digits) return 'Mobile number is required.';
+    if (!/^[6-9][0-9]{9}$/.test(digits)) return 'Please enter a valid 10-digit Indian mobile number starting with 6-9.';
+    return '';
+  };
+
+  const validatePAN = (pan: string) => {
+    if (!pan || !pan.trim()) return 'PAN is required.';
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i;
+    if (!panRegex.test(pan.trim())) return 'Please enter a valid PAN (e.g., ABCDE1234F).';
+    return '';
+  };
+
+  const validateIFSC = (ifscRaw: string) => {
+    const ifsc = (ifscRaw || '').replace(/\s+/g, '').toUpperCase();
+    if (!ifsc) return 'IFSC is required.';
+    // IFSC format: 11 chars, 4 letters, 0, 6 alphanumeric (e.g., HDFC0001234)
+    const ifscRegex = /^[A-Z]{4}0[0-9A-Z]{6}$/i;
+    if (!ifscRegex.test(ifsc)) return 'Please enter a valid IFSC (e.g., HDFC0001234).';
+    return '';
+  };
+
+  const validateCIN = (cin: string) => {
+    if (!cin || !cin.trim()) return '';
+    const c = cin.trim().toUpperCase();
+    // CIN: 21 characters alphanumeric, format: [A-Z][0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}
+    // A loose regex to match typical CIN patterns (company identification number)
+    const cinRegex = /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/;
+    if (!cinRegex.test(c)) return 'Please enter a valid CIN (21 chars).';
+    return '';
+  };
+
+  const validateGSTIN = (gstin: string) => {
+    if (!gstin || !gstin.trim()) return '';
+    const g = gstin.trim().toUpperCase();
+    // GSTIN: 15 chars. Pattern: 2 digit state code, 10 char PAN, 1 entity code, 1 Z, 1 checksum
+    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/i;
+    if (!gstRegex.test(g)) return 'Please enter a valid GSTIN (15 chars).';
+    return '';
+  };
+
+  const validateWebsite = (raw: string) => {
+    const v = (raw || '').trim();
+    if (!v) return '';
+    // Allow users to enter without protocol (e.g., example.com) by prepending https for validation
+    const candidate = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+    try {
+      const url = new URL(candidate);
+      if (!(url.protocol === 'http:' || url.protocol === 'https:')) {
+        return 'Please use http or https URL.';
+      }
+      // Basic host check
+      if (!url.hostname || !url.hostname.includes('.')) return 'Please enter a valid website URL.';
+      return '';
+    } catch (err) {
+      return 'Please enter a valid website URL (e.g., https://yourcompany.com).';
+    }
   };
 
   const saveProgress = async (nextStep?: number) => {
@@ -84,9 +192,103 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   };
 
   const handleNext = async () => {
-    if (currentStep === 1 && !formData.email_verified) {
-      await saveProgress();
-      setFormData(prev => ({ ...prev, email_verified: true }));
+    if (currentStep === 1) {
+      // Validate email before proceeding
+      const emailError = validateEmail(formData.email);
+      if (emailError) {
+        setErrors(prev => ({ ...prev, email: emailError }));
+        return;
+      }
+
+      if (!formData.email_verified) {
+        // Save progress and mark verified on Next flow
+        await saveProgress();
+        setFormData(prev => ({ ...prev, email_verified: true }));
+      }
+    }
+    // Validate PAN on step 2
+    // Validate required fields on step 3 (Business Details)
+    if (currentStep === 3) {
+      const name = (formData.business_name || '').trim();
+      const type = (formData.business_type || '').trim();
+      const address = (formData.business_address || '').trim();
+      if (!name) {
+        setErrors(prev => ({ ...prev, business_name: 'Business name is required.' }));
+        return;
+      }
+      if (!type) {
+        setErrors(prev => ({ ...prev, business_type: 'Business type is required.' }));
+        return;
+      }
+      if (!address) {
+        setErrors(prev => ({ ...prev, business_address: 'Business address is required.' }));
+        return;
+      }
+    }
+    if (currentStep === 2) {
+      const panError = validatePAN(formData.business_pan || '');
+      if (panError) {
+        setErrors(prev => ({ ...prev, business_pan: panError }));
+        return;
+      }
+    }
+    // Validate registration number (CIN or GSTIN) on step 4
+    if (currentStep === 4) {
+      const reg = formData.business_registration_number || '';
+      const cinErr = validateCIN(reg);
+      const gstErr = validateGSTIN(reg);
+      if (!reg.trim()) {
+        setErrors(prev => ({ ...prev, business_registration_number: 'Registration number is required.' }));
+        return;
+      }
+      // Accept either valid CIN or valid GSTIN
+      if (cinErr && gstErr) {
+        setErrors(prev => ({ ...prev, business_registration_number: 'Please enter a valid CIN (21 chars) or GSTIN (15 chars).' }));
+        return;
+      }
+    }
+
+    // Validate authorised signatory contact on step 5
+    if (currentStep === 5) {
+      const phoneError = validateIndianMobile(formData.authorized_signatory_contact || '');
+      if (phoneError) {
+        setErrors(prev => ({ ...prev, authorized_signatory_contact: phoneError }));
+        return;
+      }
+    }
+
+    // Validate IFSC on step 6
+    if (currentStep === 6) {
+      const ifscError = validateIFSC(formData.bank_ifsc || '');
+      if (ifscError) {
+        setErrors(prev => ({ ...prev, bank_ifsc: ifscError }));
+        return;
+      }
+      // Other required bank fields
+      const acct = (formData.bank_account_number || '').trim();
+      const bname = (formData.bank_name || '').trim();
+      const branch = (formData.bank_branch || '').trim();
+      if (!acct) {
+        setErrors(prev => ({ ...prev, bank_account_number: 'Bank account number is required.' }));
+        return;
+      }
+      if (!bname) {
+        setErrors(prev => ({ ...prev, bank_name: 'Bank name is required.' }));
+        return;
+      }
+      if (!branch) {
+        setErrors(prev => ({ ...prev, bank_branch: 'Bank branch is required.' }));
+        return;
+      }
+    }
+
+    // Validate Website URL on step 7 (optional but must be valid if provided)
+    if (currentStep === 7) {
+      const webErr = validateWebsite(formData.website_url || '');
+      if (webErr) {
+        setErrors(prev => ({ ...prev, website_url: webErr }));
+        return;
+      }
     }
 
     if (currentStep < 7) {
@@ -140,10 +342,12 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="your.email@company.com"
                 required
               />
+              {errors.email ? <p className="text-rose-600 text-sm mt-1">{errors.email}</p> : null}
             </div>
             <button
-              onClick={() => handleInputChange('email_verified', 'true')}
+              onClick={handleVerifyEmail}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all"
+              disabled={loading}
             >
               Verify
             </button>
@@ -170,6 +374,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="ABCDE1234F"
                 required
               />
+              {errors.business_pan ? <p className="text-rose-600 text-sm mt-1">{errors.business_pan}</p> : null}
             </div>
           </div>
         );
@@ -189,6 +394,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="Your Company Name"
                 required
               />
+              {errors.business_name ? <p className="text-rose-600 text-sm mt-1">{errors.business_name}</p> : null}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -207,6 +413,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 <option value="private_limited">Private Limited</option>
                 <option value="public_limited">Public Limited</option>
               </select>
+              {errors.business_type ? <p className="text-rose-600 text-sm mt-1">{errors.business_type}</p> : null}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -220,6 +427,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="Full business address"
                 required
               />
+              {errors.business_address ? <p className="text-rose-600 text-sm mt-1">{errors.business_address}</p> : null}
             </div>
           </div>
         );
@@ -239,6 +447,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="CIN/Registration Number"
                 required
               />
+              {errors.business_registration_number ? <p className="text-rose-600 text-sm mt-1">{errors.business_registration_number}</p> : null}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -296,6 +505,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="+91 9876543210"
                 required
               />
+              {errors.authorized_signatory_contact ? <p className="text-rose-600 text-sm mt-1">{errors.authorized_signatory_contact}</p> : null}
             </div>
           </div>
         );
@@ -315,6 +525,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="Account Number"
                 required
               />
+              {errors.bank_account_number ? <p className="text-rose-600 text-sm mt-1">{errors.bank_account_number}</p> : null}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -328,6 +539,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="e.g., HDFC Bank"
                 required
               />
+              {errors.bank_name ? <p className="text-rose-600 text-sm mt-1">{errors.bank_name}</p> : null}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -341,6 +553,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="Branch Name"
                 required
               />
+              {errors.bank_branch ? <p className="text-rose-600 text-sm mt-1">{errors.bank_branch}</p> : null}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -354,6 +567,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 placeholder="HDFC0001234"
                 required
               />
+              {errors.bank_ifsc ? <p className="text-rose-600 text-sm mt-1">{errors.bank_ifsc}</p> : null}
             </div>
           </div>
         );
@@ -372,6 +586,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 placeholder="https://yourcompany.com"
               />
+              {errors.website_url ? <p className="text-rose-600 text-sm mt-1">{errors.website_url}</p> : null}
               <p className="text-sm text-gray-500 mt-2">Optional: Enter your company website</p>
             </div>
           </div>
