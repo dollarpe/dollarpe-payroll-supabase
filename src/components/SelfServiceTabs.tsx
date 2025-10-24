@@ -92,14 +92,14 @@ export default function SelfServiceTabs() {
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center space-x-6 text-sm">
+        <div className="flex justify-start overflow-x-auto md:justify-center space-x-6 text-sm">
           {tabs.map((t, i) => {
             const isActive = i === active;
             return (
               <button
                 key={t.key}
                 onClick={() => setActive(i)}
-                className={`px-2 pb-2 transition-colors ${
+                className={`px-2 pb-2 transition-colors nowrap ${
                   isActive
                     ? 'text-gray-900 font-semibold border-b-2 border-red-500'
                     : 'text-gray-500 hover:text-gray-800'
@@ -115,7 +115,7 @@ export default function SelfServiceTabs() {
         <div className="mt-10 overflow-hidden">
           <div className="flex gap-6 max-w-6xl mx-auto">
             {/* Active (70%) */}
-            <div className='bg-white shadow-lg rounded-xl p-8 relative w-[70%] shrink-0'>
+            <div className='bg-white shadow-lg rounded-xl p-8 relative w-full md:w-[70%] shrink-0'>
               <div className="flex items-center gap-8">
                 {/* <Icon className={`w-8 h-8 ${activeTab.tile.iconColor} flex-shrink-0`} /> */}
                 <div>

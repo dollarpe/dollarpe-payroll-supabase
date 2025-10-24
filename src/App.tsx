@@ -21,7 +21,7 @@ function App() {
                 <Zap className="w-4 h-4" />
                 <span>Cloud-Based Payroll Solution</span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-center md:text-left text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                 Simplify Your Payroll Management
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed text-center max-w-2xl">
@@ -288,7 +288,7 @@ function App() {
         {/* <h6 className='text-green-600 font-bold text-center'></h6> */}
         <h2 className='text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center'>Natively built. Deeply connected. <br/> Inherently collaborative.</h2>
         <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-16 text-center'>Leverage the power of the ever evolving ecosystem and keep your HR, Payroll, and Finance teams on the same page.</p>
-        <div className='bg-black flex flex-row items-center justify-center rounded-xl p-12 gap-4 max-w-4xl mx-auto'>
+        <div className='bg-black flex flex-col md:flex-row items-center justify-center rounded-xl p-12 gap-4 max-w-4xl mx-auto'>
           <div className='text-left'>
             <h6 className='text-green-600 font-bold mb-3'>Custom Integrations</h6>
             <h2 className='text-3xl md:text-4xl font-bold text-white mb-6'>We can work with systems you already love</h2>
@@ -358,7 +358,7 @@ function App() {
             the way you want
           </h2>
         <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-16 text-center'>Build new feature on top of an already powerful platform and make DollarPe Payroll work the way you want.</p>
-        <img className='max-w-[80%] mx-auto' src="https://ik.imagekit.io/vv/customise-and-automate%201.svg?updatedAt=1761073652169" alt="" />
+        <img className='max-w-[100%] md:max-w-[80%] mx-auto' src="https://ik.imagekit.io/vv/customise-and-automate%201.svg?updatedAt=1761073652169" alt="" />
       </section>
 
       <section id="advanced-features" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">

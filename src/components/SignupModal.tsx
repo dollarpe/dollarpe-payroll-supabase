@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Check, CheckCircle2, Mail } from 'lucide-react';
-import { supabase, BusinessSignup } from '../lib/supabase';
+import { supabase, BusinessSignup, isSupabaseConfigured } from '../lib/supabase';
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -64,6 +64,29 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
     return '';
   };
 
+  const handleVerifyExisting = async (email: string) => {
+    if (!isSupabaseConfigured) {
+      return { existing: false, data: null };
+    }
+    try {
+      const { data, error } = await supabase
+        .from('business_signups')
+        .select('*')
+        .eq('email', email)
+        .order('updated_at', { ascending: false })
+        .limit(1);
+      if (error) {
+        console.error('Supabase lookup error:', error);
+        return { existing: false, data: null };
+      }
+      const record = Array.isArray(data) && data.length > 0 ? (data as any)[0] : null;
+      return { existing: Boolean(record), data: record };
+    } catch (e) {
+      console.error('Lookup exception:', e);
+      return { existing: false, data: null };
+    }
+  };
+
   const handleVerifyEmail = async () => {
     const emailError = validateEmail(formData.email || '');
     if (emailError) {
@@ -74,10 +97,22 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
     // Optionally, you could trigger a real verification (send OTP/email); here we mark verified and save progress
     try {
       setLoading(true);
+      // First, check if this email already has a submitted signup
+      const { existing, data } = await handleVerifyExisting(formData.email);
+      if (existing && data) {
+        setSignupId(data.id);
+        setFormData(prev => ({ ...prev, ...data, email_verified: true }));
+        // Show the success page directly when a record exists
+        setIsCompleted(true);
+        setCurrentStep(7);
+        return;
+      }
+
+      // Not existing: mark verified and save progress
       await saveProgress(currentStep);
       setFormData(prev => ({ ...prev, email_verified: true }));
     } catch (err) {
-      console.error('Verification save failed', err);
+      console.error('Verification save/lookup failed', err);
       setErrors(prev => ({ ...prev, email: 'Failed to verify email. Please try again.' }));
     } finally {
       setLoading(false);
@@ -316,11 +351,29 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Signup submitted successfully</h3>
           <p className="text-gray-600 mb-4">We will reach out within 72 hours.</p>
-          <div className="inline-flex items-center space-x-2 text-gray-700">
+          <div className="inline-flex items-center space-x-2 text-gray-700 mb-6">
             <Mail className="w-5 h-5" />
             <span>
               For queries, email <a href="mailto:support@dollarpe.xyz" className="text-[#24cb71] underline">support@dollarpe.xyz</a>
             </span>
+          </div>
+          {/* Show submitted details */}
+          <div className="text-left mx-auto max-w-xl bg-gray-50 border border-gray-200 rounded-lg p-6">
+            <h4 className="text-lg font-semibold text-gray-900 mb-3">Submitted Details</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
+              <div><span className="font-medium">Email:</span> {formData.email}</div>
+              {formData.business_name && <div><span className="font-medium">Business Name:</span> {formData.business_name}</div>}
+              {formData.business_pan && <div><span className="font-medium">Business PAN:</span> {formData.business_pan}</div>}
+              {formData.business_type && <div><span className="font-medium">Business Type:</span> {formData.business_type}</div>}
+              {formData.business_address && <div className="md:col-span-2"><span className="font-medium">Address:</span> {formData.business_address}</div>}
+              {formData.business_registration_number && <div><span className="font-medium">Registration No.:</span> {formData.business_registration_number}</div>}
+              {formData.authorized_signatory_name && <div><span className="font-medium">Signatory:</span> {formData.authorized_signatory_name}</div>}
+              {formData.authorized_signatory_contact && <div><span className="font-medium">Contact:</span> {formData.authorized_signatory_contact}</div>}
+              {formData.bank_name && <div><span className="font-medium">Bank:</span> {formData.bank_name}</div>}
+              {formData.bank_branch && <div><span className="font-medium">Branch:</span> {formData.bank_branch}</div>}
+              {formData.bank_ifsc && <div><span className="font-medium">IFSC:</span> {formData.bank_ifsc}</div>}
+              {formData.website_url && <div className="md:col-span-2"><span className="font-medium">Website:</span> {formData.website_url}</div>}
+            </div>
           </div>
         </div>
       );
@@ -617,10 +670,10 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
 
   <div className="p-6 overflow-auto flex-1">
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-start justify-between gap-7 mb-2">
               {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <div className={`flex flex-col items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}>
+                <div key={step.id} className="h-full flex items-start">
+                  <div className={`relative flex flex-col items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}>
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
                         currentStep > step.id
@@ -640,13 +693,13 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                       {step.name}
                     </span>
                   </div>
-                  {index < steps.length - 1 && (
+                  {/* {index < steps.length - 1 && (
                     <div
-                      className={`h-1 flex-1 mx-2 rounded transition-all ${
+                      className={`h-1 mt-5 flex-1 mx-1 rounded transition-all ${
                         currentStep > step.id ? 'bg-emerald-600' : 'bg-gray-200'
                       }`}
                     />
-                  )}
+                  )} */}
                 </div>
               ))}
             </div>

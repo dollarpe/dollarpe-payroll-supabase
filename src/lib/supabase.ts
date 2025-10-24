@@ -3,10 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
 // Create real client if env vars are present; otherwise use a minimal mock to avoid runtime errors in development
 export const supabase =
-  supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey)
+  isSupabaseConfigured
+    ? createClient(supabaseUrl as string, supabaseAnonKey as string)
     : {
         from() {
           return {
