@@ -24,7 +24,7 @@ export default function Header({ onStartTrial }: HeaderProps) {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <a href="/" className="flex items-center">
-              <img src="https://ik.imagekit.io/vv/Gigpay-Logo.png?updatedAt=1763113604390" alt="Gigpay Payroll" className="w-[90%]" />
+              <img src="https://ik.imagekit.io/vv/Gigpay-Logo.png?updatedAt=1763113604390" alt="Gigpay Payroll" className="w-[90%] max-w-[120px]" />
             </a>
           </div>
           <div className="hidden md:flex items-center space-x-8">
