@@ -25,7 +25,7 @@ function App() {
                 Simplify Your Payroll Management
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed text-center max-w-2xl">
-                Transform outdated payroll practices and build a better workplace for your business with DollarPe Payroll.
+                Transform outdated payroll practices and build a better workplace for your business with GigPay Payroll.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
@@ -276,7 +276,7 @@ function App() {
         {/* <h6 className='text-green-600 font-bold text-center'></h6> */}
         <h2 className='text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center'>Manage leave and
           attendance, built-in.</h2>
-        <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-16 text-center'>Create custom leave types, allow employees to apply for leaves, approve or reject leaves, manage attendance - all from within DollarPe Payroll.</p>
+        <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-16 text-center'>Create custom leave types, allow employees to apply for leaves, approve or reject leaves, manage attendance - all from within GigPay Payroll.</p>
         <img className='max-w-[80%] mx-auto' src="https://ik.imagekit.io/vv/hero-banner.svg?updatedAt=1761067515720" alt="" />
       </section>
       <SelfServiceTabs />
@@ -357,7 +357,7 @@ function App() {
             Customise and automate 
             the way you want
           </h2>
-        <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-16 text-center'>Build new feature on top of an already powerful platform and make DollarPe Payroll work the way you want.</p>
+        <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-16 text-center'>Build new feature on top of an already powerful platform and make GigPay Payroll work the way you want.</p>
         <img className='max-w-[100%] md:max-w-[80%] mx-auto' src="https://ik.imagekit.io/vv/customise-and-automate%201.svg?updatedAt=1761073652169" alt="" />
       </section>
 
@@ -439,7 +439,7 @@ function App() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                quote: "DollarPe Payroll has completely transformed our payroll process. What used to take days now takes hours. The compliance features give us peace of mind.",
+                quote: "GigPay Payroll has completely transformed our payroll process. What used to take days now takes hours. The compliance features give us peace of mind.",
                 author: "Dhruv Vats",
                 role: "HR Director",
                 company: "Rocket Incentive"
@@ -451,7 +451,7 @@ function App() {
                 company: "Dojima Nework"
               },
               {
-                quote: "Switching to DollarPe Payroll was the best decision for our growing startup. The automation saves us countless hours and the support team is incredibly responsive.",
+                quote: "Switching to GigPay Payroll was the best decision for our growing startup. The automation saves us countless hours and the support team is incredibly responsive.",
                 author: "Sujith Sizon",
                 role: "CEO",
                 company: "Audace LLC"

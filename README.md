@@ -1,4 +1,4 @@
-# DollarPe
+# GigPay
 
 ## Supabase Table for Data Collection
 

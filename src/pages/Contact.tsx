@@ -66,7 +66,7 @@ export default function Contact() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center"><Mail className="w-5 h-5 text-gray-700" /></div>
-                  <a href="mailto:support@dollarpe.xyz" className="text-gray-800 hover:text-emerald-700">support@dollarpe.xyz</a>
+                  <a href="mailto:support@gigpay.xyz" className="text-gray-800 hover:text-emerald-700">support@gigpay.xyz</a>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center"><Phone className="w-5 h-5 text-gray-700" /></div>

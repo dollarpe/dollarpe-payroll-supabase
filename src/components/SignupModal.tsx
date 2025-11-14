@@ -351,10 +351,10 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Signup submitted successfully</h3>
           <p className="text-gray-600 mb-4">We will reach out within 72 hours.</p>
-          <div className="inline-flex items-center space-x-2 text-gray-700 mb-6">
+            <div className="inline-flex items-center space-x-2 text-gray-700 mb-6">
             <Mail className="w-5 h-5" />
             <span>
-              For queries, email <a href="mailto:support@dollarpe.xyz" className="text-[#24cb71] underline">support@dollarpe.xyz</a>
+              For queries, email <a href="mailto:support@gigpay.xyz" className="text-[#24cb71] underline">support@gigpay.xyz</a>
             </span>
           </div>
           {/* Show submitted details */}

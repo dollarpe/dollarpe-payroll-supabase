@@ -14,13 +14,13 @@ export default function About() {
 
             {/* Company Overview */}
             <h2 className="text-2xl font-bold mb-2">Company Overview</h2>
-            <p className="text-gray-700 mb-4">Brief introduction to DollarPe Payroll</p>
+            <p className="text-gray-700 mb-4">Brief introduction to GigPay Payroll</p>
             <p className="text-gray-700 mb-6">Core services offered: comprehensive payroll solutions for Indian businesses</p>
 
             {/* About the Company */}
             <h2 className="text-2xl font-bold mb-2 mt-8">About the Company</h2>
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>Detailed description of DollarPe Payroll's specialization in payroll management</li>
+              <li>Detailed description of GigPay Payroll's specialization in payroll management</li>
               <li>Emphasis on the cloud-based platform that is user-friendly and scalable</li>
               <li>Highlight the commitment to compliance with Indian statutory requirements</li>
               <li>Discussion on the importance of simplifying payroll processes for business growth</li>
@@ -48,15 +48,15 @@ export default function About() {
 
             {/* Team */}
             <h2 className="text-2xl font-bold mb-2 mt-8">Team</h2>
-            <p className="text-gray-700 mb-4">Introduction to the DollarPe Payroll team</p>
+            <p className="text-gray-700 mb-4">Introduction to the GigPay Payroll team</p>
             <p className="text-gray-700 mb-4">Overview of expertise and experience in payroll and compliance</p>
             <p className="text-gray-700 mb-6">Commitment to providing ongoing support and addressing client challenges</p>
 
             {/* Conclusion */}
             <h2 className="text-2xl font-bold mb-2 mt-8">Conclusion</h2>
-            <p className="text-gray-700 mb-4">Reiteration of DollarPe Payroll's role as a trusted partner in payroll management</p>
+            <p className="text-gray-700 mb-4">Reiteration of GigPay Payroll's role as a trusted partner in payroll management</p>
             <p className="text-gray-700 mb-6">Encouragement for potential clients to reach out for tailored solutions</p>
-            <p className="text-sm text-gray-500">This outline critically addresses the key components of DollarPe Payroll’s company page, emphasizing its position as a forward-thinking payroll solution provider while ensuring clarity on its mission, vision, values, and team structure.</p>
+            <p className="text-sm text-gray-500">This outline critically addresses the key components of GigPay Payroll’s company page, emphasizing its position as a forward-thinking payroll solution provider while ensuring clarity on its mission, vision, values, and team structure.</p>
           </div>
         </section>
       </main>

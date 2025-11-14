@@ -13,7 +13,7 @@ export default function Privacy() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Privacy Policy</h1>
 
             <p className="text-gray-700 mb-6">
-              DollarPe Payroll ("Company," "we," "us," or "our") respects your privacy and is committed to protecting it through this Privacy Policy. This Privacy Policy describes the types of information we may collect from you or that you may provide when you visit our website, use our payout services (excluding gaming and cryptocurrency-related payouts), and our practices for collecting, using, maintaining, protecting, and disclosing that information.
+              GigPay Payroll ("Company," "we," "us," or "our") respects your privacy and is committed to protecting it through this Privacy Policy. This Privacy Policy describes the types of information we may collect from you or that you may provide when you visit our website, use our payout services (excluding gaming and cryptocurrency-related payouts), and our practices for collecting, using, maintaining, protecting, and disclosing that information.
             </p>
 
             {/* Section 1: Scope */}
@@ -21,7 +21,7 @@ export default function Privacy() {
             <p className="text-gray-700 mb-3">This policy applies to information we collect:</p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
               <li>1.1 Through our services, including any payout products we offer (except for payouts related to gaming or cryptocurrency businesses).</li>
-              <li>1.2 Through electronic communications, such as email, text, and other messages between you and DollarPe Payroll.</li>
+              <li>1.2 Through electronic communications, such as email, text, and other messages between you and GigPay Payroll.</li>
               <li>1.3 Through customer support interactions and our marketing communications.</li>
             </ul>
             <p className="text-gray-700 mt-4 mb-2">It does not apply to information collected by:</p>
@@ -54,7 +54,7 @@ export default function Privacy() {
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
               <li>4.1 <span className="font-semibold">Service Providers:</span> who perform services on our behalf, such as payment processing, identity verification, and fraud detection.</li>
               <li>4.2 <span className="font-semibold">Regulatory Authorities:</span> when required to comply with applicable laws and regulations.</li>
-              <li>4.3 <span className="font-semibold">Business Transfers:</span> if DollarPe Payroll is involved in a merger, acquisition, or asset sale.</li>
+              <li>4.3 <span className="font-semibold">Business Transfers:</span> if GigPay Payroll is involved in a merger, acquisition, or asset sale.</li>
               <li>4.4 <span className="font-semibold">With Your Consent:</span> for any other purpose disclosed to you when you provide the information.</li>
             </ul>
             <p className="text-gray-700 mt-2">We do not sell or rent your personal information to third parties.</p>
@@ -76,7 +76,7 @@ export default function Privacy() {
               <li>7.3 Request deletion of your personal information, subject to legal retention requirements.</li>
               <li>7.4 Object to or restrict certain uses of your information.</li>
             </ul>
-            <p className="text-gray-700 mt-2">To exercise these rights, please contact us at: <a href="mailto:support@dollarpe.xyz" className="text-emerald-700 font-medium">support@dollarpe.xyz</a>.</p>
+            <p className="text-gray-700 mt-2">To exercise these rights, please contact us at: <a href="mailto:support@gigpay.xyz" className="text-emerald-700 font-medium">support@gigpay.xyz</a>.</p>
 
             {/* Section 8: Changes to this privacy policy */}
             <h2 className="text-2xl font-bold mb-2 mt-8">Section 8 - Changes to this privacy policy</h2>
@@ -85,8 +85,8 @@ export default function Privacy() {
             {/* Section 9: Contact Us */}
             <h2 className="text-2xl font-bold mb-2 mt-8">Section 9 - Contact Us</h2>
             <div className="text-gray-700 space-y-1">
-              <p>DollarPe Payroll</p>
-              <p>Email: <a href="mailto:support@dollarpe.xyz" className="text-emerald-700 underline">support@dollarpe.xyz</a></p>
+              <p>GigPay Payroll</p>
+              <p>Email: <a href="mailto:support@gigpay.xyz" className="text-emerald-700 underline">support@gigpay.xyz</a></p>
               <p>Phone: <a href="tel:+919880265163" className="text-emerald-700 underline">+91 9880265163</a></p>
               <p>Hours: Monday - Friday (9:00 AM to 7:00 PM)</p>
               <p>Address: MyTime Cowork, 2nd Floor, 55, Lane 2, Westend Marg, Near Saket, Saidulajab, New Delhi 110030</p>
