@@ -25,8 +25,8 @@ export default function Terms() {
               <li>Your use of this website and any dispute arising out of such use of the website is subject to the exclusive jurisdiction of the courts of Delhi, Government of India.</li>
             </ul>
             <h2 className="text-2xl font-bold mb-2 mt-8">Acceptance of Terms through Use</h2>
-              <li>You may not create a link to this website from another website or document without GigPay Payroll's prior written consent.</li>
-                      <p>The data we collect from you are stored in our system servers and will be treated with utmost confidentiality. Your personal information will be used only by GigPay Payroll for all business transactions that require your information to complete the transactions. GigPay Payroll reserves the right to verify the authenticity of the information or documents you provide.</p>
+              <li>You may not create a link to this website from another website or document without Gigpay's prior written consent.</li>
+                      <p>The data we collect from you are stored in our system servers and will be treated with utmost confidentiality. Your personal information will be used only by Gigpay for all business transactions that require your information to complete the transactions. Gigpay reserves the right to verify the authenticity of the information or documents you provide.</p>
           </div>
         </section>
       </main>
