@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            © 2025 Gigpay. All rights reserved.
+            © 2025 Gigpay Operated by DollarPe Technologies Private Limited. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="/privacy" className="text-gray-400 hover:text-emerald-400 transition-colors text-sm">Privacy Policy</a>
